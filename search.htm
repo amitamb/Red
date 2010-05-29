@@ -1,0 +1,228 @@
+<html>
+<link rel="search" type="application/opensearchdescription+xml" title="Red" href="RedSearchPlugin.xml">
+
+<style>
+*{margin:0px;padding:0px;}
+body{width:100%;height:100%;font:80% helvetica, arial, sans-serif;}
+iframe{border:0px;}
+#bodyDiv{width:100%;height:100%;}
+#topTable{width:100%;height:100%;border:0px;padding:0px;border-spacing:0px;}
+#topTable tr{border:2px solid;}
+#lefttd{width:250px;}
+#righttd{}
+#searchFrame{width:100%;height:100%;}
+
+#leftDiv{position:relative;width:100%;height:100%;background-color:green;background-image:url('img/backBar.gif');text-align:left;vertical-align:top;}
+#overlayDropText{position:absolute;z-index:3;left:0px;top:0px;border:0px;width:100%;height:100%;background-color:transparent;color:trasparent;font-size:0px;cursor:default;}
+</style>
+
+<script type="text/javascript">
+function checkUrlForAnchor()
+{
+ 	if (this.url == (window.location + ""))	
+	{
+		return;
+	}
+	else
+	{
+ 		this.url = window.location + "";
+	}
+
+	var searchFrame = document.getElementById("searchFrame");
+
+	var parts = this.url.split("#");
+
+	if (parts.length > 1)
+	{
+		var query = parts[1];
+		
+		var searchUrl = "http://www.google.com/search?q=" + query;
+		
+		// For version 1.0 only google search will be supported as default search
+		searchFrame.src = searchUrl;
+	}
+	else
+	{
+		searchFrame.src = "http://www.google.com/";
+	}
+}
+
+function loaded()
+{
+	checkUrlForAnchor();
+	
+	// following check is added to track changes in anchor (after #) part of
+	// the url
+	// Changes in anchor does no cause page reload so it is important to check anchor regularly for any changes
+	setInterval('checkUrlForAnchor()',100);
+	
+	var overlayDropText = document.getElementById("overlayDropText");
+	
+	overlayDropText.ondragenter=overlayDropTextDragEnter;
+	overlayDropText.ondragover=overlayDropTextDragOver;
+	overlayDropText.ondragleave=overlayDropTextDragLeave;
+	
+	/////////////
+	// Firefox supports ondrop
+	// but used for clearing interval i.e. clearing tracker which checks if drop is completed
+	overlayDropText.ondrop=overlayDropTextDragdrop;
+	
+	overlayDropText.addEventListener("dragdrop", overlayDropTextDragdrop, false);
+}
+
+function getBrowser()
+{
+	var userAgent = navigator.userAgent.toLowerCase();
+
+	// assumed default
+	if (userAgent.indexOf('firefox') > -1)
+	{
+		return "firefox";
+	}
+	else if (userAgent.indexOf('chrome') > -1)
+	{
+		return "chrome";
+	}
+	else if (userAgent.indexOf('safari') > -1)
+	{
+		return "safari";
+	}	
+	else if (userAgent.indexOf('msie') > -1)
+	{
+		return "ie";
+	}
+}
+
+function showDebug(msg)
+{
+	var debugText = document.getElementById("debugText");
+	
+	debugText.innerHTML = msg;
+}
+
+////////////////
+// For Chrome which doesn't seem to support drop
+////////////////
+var dropTrackerId=-1;
+var curDropX, curDropY;
+
+function dropTracker()
+{
+	var overlayDropText = document.getElementById("overlayDropText");
+	
+	if (overlayDropText.value != "")
+	{
+		clearInterval(dropTrackerId);
+		dropTrackerId = -1;
+		var url = overlayDropText.value;
+		overlayDropText.value = "";
+		linkDropped(curDropX, curDropY, url);
+	}
+}
+
+function overlayDropTextDragEnter(event)
+{
+	curDropX = event.clientX;
+	curDropY = event.clientY;
+	
+	linkEnter(curDropX, curDropY);
+	linkDragging(curDropX, curDropY);
+	
+	if (getBrowser() == "chrome" && dropTrackerId == -1)
+	{
+		dropTracker();
+		dropTrackerId = setInterval(dropTracker, 20);
+	}
+}
+
+function overlayDropTextDragOver(event)
+{
+	curDropX = event.clientX;
+	curDropY = event.clientY;
+		
+	linkDragging(curDropX, curDropY);
+}
+
+function overlayDropTextDragLeave(event)
+{
+	if (dropTrackerId != -1)
+	{
+		clearInterval(dropTrackerId);
+		dropTrackerId = -1;
+	}
+	
+	linkExit();
+}
+
+///////////////
+// Not used for now
+// Will be used in future if decided to use ondrop
+// but ondrop does not work in chrome
+function overlayDropTextDragdrop(event)
+{
+	var overlayDropText = document.getElementById("overlayDropText");
+	var url = overlayDropText.value;
+	overlayDropText.value = "";
+	linkDropped(event.clientX, event.clientY, url);	
+}
+
+function hideOverlayText()
+{
+	var overlayDropText = document.getElementById("overlayDropText");
+	
+	overlayDropText.style.visibility = 'hidden';
+}
+
+function showOverlayText()
+{
+	var overlayDropText = document.getElementById("overlayDropText");
+	
+	overlayDropText.style.visibility = 'visible';
+}
+
+//////////////////////////////////
+// Following functions will be called
+// at appropriate times
+//////////////////////////////////
+
+function linkEnter(x, y)
+{
+	document.title = "Enter";
+}
+
+function linkDragging(x, y)
+{
+	showDebug(x +","+y);
+}
+
+function linkExit()
+{
+	document.title = "Exit";
+}
+
+function linkDropped(x, y, url)
+{
+	alert('dropped'+x+y+url);
+}
+
+
+</script>
+</head>
+<body onload="loaded()">
+<div id="bodyDiv">
+<table id="topTable">
+	<tr>
+		<td id="lefttd">
+			<div id="leftDiv" onmouseover="hideOverlayText()" onmouseout="showOverlayText()">
+				<input id="overlayDropText" type="text" value="" />
+				<div id="leftDivContent">
+					<div id="debugText"></div>
+				</div>
+			</div>
+		</td>
+		<td id="righttd"><iframe id="searchFrame" src="about:blank"  /></td>
+	</tr>
+</table>
+</div>
+</body>
+</html>
