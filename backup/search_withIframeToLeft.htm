@@ -16,9 +16,9 @@ body{width:100%;height:100%;font:80% helvetica, arial, sans-serif;}
 
 /*Important here that width is fixed to 250 not relative*/
 #leftDivContent{position:relative;width:100%;height:100%;}
-
+#leftDivContent table{width:100%;height:100%;border-spacing:0px;}
 #debugText{}
-
+#leftDivFrame{border:0px;width:100%;height:100%;}
 </style>
 
 <script type="text/javascript">
@@ -207,57 +207,7 @@ function linkExit()
 
 function linkDropped(x, y, url)
 {
-	//alert('dropped'+x+y+url);
-	
-	addIcon(x, y, url);
-}
-
-//////////////////////////
-// Following code should go into its own iframe
-// Right now supporting only youtube as menuTitle
-//////////////////////////
-
-function addIcon(x, y, url)
-{
-	// some attributes of icon
-	var iWidth = 24, iHeight = 24;
-	
-	// get parent
-	var parentDiv = document.getElementById("leftDivContent");
-	
-	var newIcon = document.createElement('div');
-	newIcon.style.width = iWidth;
-	newIcon.style.height = iHeight;
-	newIcon.style.backgroundColor = 'red';
-	//newIcon.style.opacity = '0.2';
-	newIcon.style.backgroundImage = "url('http://www.reddit.com/favicon.ico')";	
-	
-	//alert(newIcon);
-	
-	//parentDiv.appendChild(newIcon);
-	
-	var xmlhttp;
-	if (window.XMLHttpRequest)
-	{
-		// code for IE7+, Firefox, Chrome, Opera, Safari
-		xmlhttp=new XMLHttpRequest();
-	}
-	else
-	{
-		// code for IE6, IE5
-		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-	}
-	xmlhttp.onreadystatechange=function()
-	{
-		if (xmlhttp.readyState==4 && xmlhttp.status==200)
-		{
-			//alert(xmlhttp.responseText);
-			
-			parentDiv.innerHTML += xmlhttp.responseText;
-		}
-	}
-	xmlhttp.open("GET","getIconDiv?"+"url="+encodeURIComponent(url)+"&x="+x+"&y="+y,true);
-	xmlhttp.send();
+	alert('dropped'+x+y+url);
 }
 
 
@@ -271,7 +221,16 @@ function addIcon(x, y, url)
 			<div id="leftDiv" onmouseover="hideOverlayText()" onmouseout="showOverlayText()">
 				<input id="overlayDropText" type="text" value="" />
 				<div id="leftDivContent">
-					<div id="debugText">asdasdasd</div>
+					<table>
+						<tr>
+							<td><div id="debugText">asdasdasd</div></td>
+						</tr>
+						<tr>
+							<td>
+								<iframe id="leftDivFrame" src="menu.htm"></iframe>
+							</td>
+						</tr>
+					</table>
 				</div>
 			</div>
 		</td>
