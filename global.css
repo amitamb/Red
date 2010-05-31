@@ -1,0 +1,42 @@
+body {background-color:#fff; font:90% helvetica, arial, sans-serif; color:#000;text-align: center;}
+body, form, h1, h2, h3, h4, h5, h6, table, tr, td, div, ul {margin:0; padding:0;}
+a, a:link, a:visited {text-decoration:none; color:#0066cc; cursor:pointer; outline-style:none}
+a:hover, a:focus {text-decoration:underline; color:#0066cc;}
+a img {border:none;}
+
+h3 {font: bold 18px/18px helvetica, arial, sans-serif; line-height: 18px;}
+h2.blue_header {font:bold 18px/18px helvetica, arial, sans-serif; display: block; color: #0066cc;}
+h3.blue_header {font:normal 18px/18px helvetica, arial, sans-serif; display: block; color: #0066cc;}
+p {font: normal 14px/14px helvetica, arial, sans-serif; line-height: 17px; color: #333;}
+
+#topLogo{width:960px;margin-left:auto;margin-right:auto;background-color:;text-align:left;}
+
+#mainDiv{width:960px;margin-left:auto;margin-right:auto;text-align: left;}
+
+#topNav{width:100%;height:2.3em;background-color:#faf0fa;}
+
+#topNav a{padding-top:0.5em;padding-bottom:0.5em;padding-left:10px;padding-right:10px;text-decoration:none;display:inline-block;font-weight:bold;}
+
+#bottomNav{width:100%;padding-top:10px;padding-bottom:10px;text-align:center;background-color:#fafafa;opacity:0.5;}
+
+#mainDiv{}
+
+#infoMain{padding:20px;border:0px;width:100%;}
+
+#infoMain tr td{border:0px solid;}
+
+#lefttd{border:1px solid;width:200px;}
+
+.messagetd{background-color:#f7f7f7;}
+
+#leftBar{}
+
+#leftBar ul{list-style:none;}
+
+#leftBar ul li a{display:block;height:50px;padding:30px;vertical-align:center;font-size:130%;background-color:#faf0fa;text-decoration:none;}
+
+div.messagePanel{display:none;width:100%;height:100%;padding:50px;}
+
+div.messagePanel p{font-size:120%;padding-bottom:30px;padding-top:30px;}
+
+#message1{display:block;}
