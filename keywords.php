@@ -4,7 +4,7 @@ require_once("sessionStart.php");
 
 $connection = new Mongo();
 
-$keywords = $connection->pune->keywords;
+$keywords = $connection->red->keywords;
 
 if (isset($_GET['action']))
 {

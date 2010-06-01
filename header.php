@@ -2,6 +2,7 @@
 <head>
 
 <link href="global.css" media="screen" rel="stylesheet" type="text/css" />
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /> 
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
 <script type="text/javascript">
