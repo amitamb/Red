@@ -1,10 +1,10 @@
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
                        xmlns:moz="http://www.mozilla.org/2006/browser/search/">
-<ShortName>Red Local</ShortName>
+<ShortName>Red</ShortName>
 <Description>Making surfing the web easy</Description>
 <InputEncoding>UTF-8</InputEncoding>
-<Image width="16" height="16" type="image/x-icon">http://localhost/Red/favicon.ico</Image>
-<Url type="text/html" method="get" template="http://localhost/Red/search#{searchTerms}">
+<Image width="16" height="16" type="image/x-icon">http://www.temilan.com/Red/favicon.ico</Image>
+<Url type="text/html" method="get" template="http://www.temilan.com/Red/search#{searchTerms}">
 </Url>
 <Url type="application/x-suggestions+json" template="suggestionURL"/>
 <moz:SearchForm>searchFormURL</moz:SearchForm>

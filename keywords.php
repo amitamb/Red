@@ -1,89 +1,77 @@
 <?
 
+require_once("autoInclude.php");
 require_once("sessionStart.php");
 
-$connection = new Mongo();
-
-$keywords = $connection->red->keywords;
-
-if (isset($_GET['action']))
+function getAction()
 {
-	$action = $_GET['action'];
-	
-	if ($action == "remove")
+	if (isset($_GET['action']))
 	{
-		// remove keyword
-		if ($_GET['keyword'])
-		{
-			$keyword = $_GET['keyword'];
-			
-			$keyword = array("str"=>$keyword, "userSessionId"=>$sessionId);
-
-			$keywords->remove($keyword);
-			
-			header('location:index.php');
-			
-			exit();
-		}
+		return $_GET['action'];
 	}
+	else
+	{
+		return null;
+	}
+}
+
+if (getAction() == "add")
+{
+	Keyword::add($sessionId);
+	
+	header('location:keywords.php');
+}
+else if (getAction() == "remove")
+{
+	Keyword::remove($sessionId);
+	
+	header('location:keywords.php');
 }
 else
 {
-	if ($_GET['keyword'])
-	{
-		$keyword = $_GET['keyword'];
-		
-		$keywords->ensureIndex(array("str"=>1, "userSessionId"=>1));
-
-		$keyword = array("str"=>$keyword, "userSessionId"=>$sessionId);
-
-		$keywords->save($keyword);
-		
-		header('location:index.php');
-		
-		exit();
-	}
-}
-
-$query = array("userSessionId"=>$sessionId);
-
-$cursor = $keywords->find($query);
-
-$keywordsList = array();
-
-while( $cursor->hasNext() ) {
-	$keywordsList[] = $cursor->getNext();
+	$keywords = Keyword::getKeywords($sessionId);
 }
 
 require_once("header.php");
 
 ?>
 
-<!--
-<html>
-<head>
-<title>Keywords to track</title>
-</head>
-<body>
--->
-<form>
+<style>
 
-<input type="text" name="keyword"></input> <button>Add</button>
+#tableDiv{text-align:center;width:100%;margin-left:auto;margin-right:auto;}
+#tableDiv table{text-align:center;width:100%;}
+#keyword{width:400px;}
+
+</style>
+
+<script>
+
+$(document).ready(function(){
+	
+});
+
+</script>
+<div id="tableDiv">
+<table border="1" width="400px">
+
+<tr><td>
+<form id="addKeywordForm" method="POST" action="keywords.php?action=add">
+
+<input id="keyword" type="text" name="keyword"></input> <button id="addKeyword">Add</button>
 
 </form>
-<a href="showLog.php">Show log</a>
-<table border="1" width="400px">
+</td></tr>
 <?
-
-$keywords = $keywordsList;
 
 foreach ($keywords as $keyword)
 {
-	print "<tr><td>".$keyword["str"]."<td width='80px'><a href='?action=remove&keyword=".$keyword["str"]."'>remove</a>";
+	print "<tr><td>".$keyword["str"]."<td width='80px'><form method='post' action='keywords.php?action=remove' ><input type='hidden' name='_id' value='".$keyword["_id"]."'><button>Remove</button></form>";
 }
 
 ?>
 </table>
+
+</div>
 <?
 
 require_once("footer.php");
