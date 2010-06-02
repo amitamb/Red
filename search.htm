@@ -103,13 +103,15 @@ function getCookie(c_name)
 function getKeywordsArrayLocal()
 {
 	var username = getCookie("username");
-	return new Array(localStorage.getItem(username+".keywords"));
+	var keywords = localStorage.getItem(username+".keywords").split(",");
+	
+	return keywords;
 }
 
 function setKeywordsArrayLocal(keywords)
 {
 	var username = getCookie("username");
-	localStorage.setItem(username+".keywords", keywords);	
+	localStorage.setItem(username+".keywords", keywords);
 	localStorage.setItem(username+".lastUpdateDateTime", new Date());
 }
 
@@ -130,7 +132,7 @@ function needKeywordsUpdate()
 		// needs refresh
 		return true;
 	}
-	else if(String(window.location).indexOf("update=f"))
+	else if(String(window.location).indexOf("update=f") != -1)
 	{
 		return true;
 	}
@@ -171,7 +173,6 @@ function updateKeywordsArray(waitForUpdate)
 				
 				if (line.length > 0)
 				{
-					//alert(line);
 					keywords.push(line);
 				}
 			}
@@ -236,6 +237,9 @@ function checkUrlForAnchor()
 		{
 			var searchUrl = getDefaultSearchEngineUrl();
 
+			document.write("<a href='"+searchUrl.replace("{searchTerms}", query)+"'>Go</a>");
+
+			//setTimeout(function(){window.location = searchUrl.replace("{searchTerms}", query);}, 5000);
 			//window.location = searchUrl.replace("{searchTerms}", query);
 		}
 		
