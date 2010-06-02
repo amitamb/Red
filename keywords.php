@@ -27,6 +27,18 @@ else if (getAction() == "remove")
 	
 	header('location:keywords.php');
 }
+else if (getAction() == "enlist")
+{
+	$keywords = Keyword::getKeywords($sessionId);
+	
+	foreach ($keywords as $keyword)
+	{
+		//print "<tr><td>".$keyword["str"]."<td width='80px'><form method='post' action='keywords.php?action=remove' ><input type='hidden' name='_id' value='".$keyword["_id"]."'><button>Remove</button></form>";
+		print $keyword["str"]."\n";
+	}
+	
+	exit();
+}
 else
 {
 	$keywords = Keyword::getKeywords($sessionId);
@@ -40,7 +52,7 @@ require_once("header.php");
 
 #tableDiv{text-align:center;width:100%;margin-left:auto;margin-right:auto;}
 #tableDiv table{text-align:center;width:100%;}
-#keyword{width:400px;}
+#keyword{width:100%;text-align:center;}
 
 </style>
 
@@ -57,7 +69,12 @@ $(document).ready(function(){
 <tr><td>
 <form id="addKeywordForm" method="POST" action="keywords.php?action=add">
 
-<input id="keyword" type="text" name="keyword"></input> <button id="addKeyword">Add</button>
+<input id="keyword" type="text" name="keyword"></input>
+
+</td>
+<td>
+
+ <button id="addKeyword">Add</button>
 
 </form>
 </td></tr>

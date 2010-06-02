@@ -10,8 +10,15 @@
 <body>
 
 <div id="topLogo">
+<table><tr><td>
+<img src="img/logo.png" style="padding-right:10px;opacity:0.2;" />
+</td>
+<td>
 <h1>Red</h1>
-<sub>for lack of good name</sub>
+<sub>Making surfing the web easy</sub>
+</td>
+</tr>
+</table>
 </div>
 <div id="topNav">
 <a href="index.php" class="selected">Introduction</a>
