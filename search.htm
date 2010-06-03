@@ -116,8 +116,11 @@ function getKeywordsArrayLocal()
 	}
 	else
 	{
+		alert("no keywords");
 		return null;
 	}
+	
+	alert(keywords);
 	
 	return keywords;
 }
@@ -165,8 +168,9 @@ function needKeywordsUpdate()
 	return false;
 }
 
-// waitForUpdate is ignored right now
-function updateKeywordsArray(waitForUpdate)
+// synchrounous http call
+// wait for it
+function updateKeywordsArray()
 {
 	var xmlhttp;
 	if (window.XMLHttpRequest)
@@ -179,33 +183,28 @@ function updateKeywordsArray(waitForUpdate)
 		// code for IE6, IE5
 		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
 	}
-	xmlhttp.onreadystatechange=function()
+
+	// making the call syncronous
+	xmlhttp.open("GET","keywords.php?action=enlist",false); // false
+	xmlhttp.send(null);
+
+	var lines = xmlhttp.responseText.split("\n");
+
+	var keywords = new Array();
+	
+	for (var i=0;i<lines.length;i++)
 	{
-		if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		var line = lines[i];
+		
+		if (line.length > 0)
 		{
-			var lines = xmlhttp.responseText.split("\n");
-
-			//document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
-
-			//document.write(xmlhttp.responseText);
-			
-			var keywords = new Array();
-			
-			for (var i=0;i<lines.length;i++)
-			{
-				var line = lines[i];
-				
-				if (line.length > 0)
-				{
-					keywords.push(line);
-				}
-			}
-
-			setKeywordsArrayLocal(keywords);
+			keywords.push(line);
 		}
-	};
-	xmlhttp.open("GET","keywords.php?action=enlist",true);
-	xmlhttp.send();
+	}
+
+	setKeywordsArrayLocal(keywords);
+	
+	return keywords;
 }
 
 function getKeywordsArray()
@@ -214,11 +213,11 @@ function getKeywordsArray()
 	
 	if (getKeywordsArrayLocal() == null)
 	{
-		updateKeywordsArray(true);
+		keywords = updateKeywordsArray();
 	}
 	else if (needKeywordsUpdate()) 
 	{
-		updateKeywordsArray(false);
+		keywords = updateKeywordsArray();
 	}
 	
 	return keywords;

@@ -19,7 +19,7 @@ if (getAction() == "add")
 {
 	Keyword::add($sessionId);
 	
-	header('location:keywords.php');
+	header('location:keywords.php?update=true');
 }
 else if (getAction() == "remove")
 {
@@ -90,6 +90,83 @@ foreach ($keywords as $keyword)
 
 </div>
 <script>
+
+
+/////////////////////
+// Following part should be copied as it is from search.htm
+/////////////////////
+
+function getCookie(c_name)
+{
+	if (document.cookie.length>0)
+	{
+		c_start=document.cookie.indexOf(c_name + "=");
+		if (c_start!=-1)
+		{
+			c_start=c_start + c_name.length+1;
+			c_end=document.cookie.indexOf(";",c_start);
+			if (c_end==-1) c_end=document.cookie.length;
+			return unescape(document.cookie.substring(c_start,c_end));
+		}
+	}
+	return "";
+}
+
+function setKeywordsArrayLocal(keywords)
+{
+	var username = getCookie("username");
+	localStorage.setItem(username+".keywords", keywords);
+	localStorage.setItem(username+".lastUpdateDateTime", new Date());
+}
+
+// synchrounous http call
+// wait for it
+function updateKeywordsArray()
+{
+	var xmlhttp;
+	if (window.XMLHttpRequest)
+	{
+		// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	}
+	else
+	{
+		// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+
+	// making the call syncronous
+	xmlhttp.open("GET","keywords.php?action=enlist",false); // false
+	xmlhttp.send(null);
+
+	var lines = xmlhttp.responseText.split("\n");
+
+	var keywords = new Array();
+	
+	for (var i=0;i<lines.length;i++)
+	{
+		var line = lines[i];
+		
+		if (line.length > 0)
+		{
+			keywords.push(line);
+		}
+	}
+
+	setKeywordsArrayLocal(keywords);
+	
+	return keywords;
+}
+
+<? if (isset($_GET["update"]) && $_GET["update"] == "true" )
+{ ?>
+
+updateKeywordsArray();
+
+<? 
+}
+?>
+
 </script>
 <?
 
