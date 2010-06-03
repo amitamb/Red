@@ -89,6 +89,8 @@ foreach ($keywords as $keyword)
 </table>
 
 </div>
+<script>
+</script>
 <?
 
 require_once("footer.php");

@@ -50,14 +50,18 @@ function containsKeyword(query, keywordsArray)
 {
 	var len = keywordsArray.length;
 	
+	query = unescape(query);
+	
+	alert("processing query:"+query);
+	
 	// replace spaces(" ") with "+" for easy split
 	query = query.replace(" ", "+");
-	
+
 	var queryParts = query.split("+");
 	
 	for (var j=0;j<queryParts.length;j++)
 	{
-		var queryPart = unescape(queryParts[j]);
+		var queryPart = queryParts[j];
 		
 		if (queryPart.startsWith("#"))
 		{
@@ -72,7 +76,7 @@ function containsKeyword(query, keywordsArray)
 		
 		for (var j=0;j<queryParts.length;j++)
 		{
-			var queryPart = unescape(queryParts[j]);
+			var queryPart = queryParts[j];
 			if (queryPart == keyword)
 			{
 				// match found
@@ -103,7 +107,17 @@ function getCookie(c_name)
 function getKeywordsArrayLocal()
 {
 	var username = getCookie("username");
-	var keywords = localStorage.getItem(username+".keywords").split(",");
+
+	var keywordsStr = localStorage.getItem(username+".keywords", "");
+	
+	if (keywordsStr != null)
+	{
+		var keywords = keywordsStr.split(",");
+	}
+	else
+	{
+		return null;
+	}
 	
 	return keywords;
 }
@@ -119,7 +133,17 @@ function needKeywordsUpdate()
 {
 	var username = getCookie("username");
 	
-	var lastUpdateDateTime = new Date(localStorage.getItem(username+".lastUpdateDateTime"));
+	var lastUpdateDateTimeStr = localStorage.getItem(username+".lastUpdateDateTime");
+	
+	if (lastUpdateDateTimeStr == null)
+	{
+		var lastUpdateDateTime = new Date(0);
+	}
+	else
+	{
+		var lastUpdateDateTime = new Date(lastUpdateDateTimeStr);
+	}
+
 	var currentDateTime = new Date();
 	
 	var noOfDaysToExpire = 1;
@@ -222,10 +246,11 @@ function checkUrlForAnchor()
 
 	if (query != "")
 	{	
+		//alert("as");
 		// if query contains hot keywords
 		// then use custom search page otherwise forward to default search engine
 		var keywordsArray = getKeywordsArray();
-		
+
 		if ( containsKeyword(query, keywordsArray) )
 		{
 			var searchUrl = "http://www.google.com/search?q=" + query;
@@ -237,13 +262,10 @@ function checkUrlForAnchor()
 		{
 			var searchUrl = getDefaultSearchEngineUrl();
 
-			document.write("<a href='"+searchUrl.replace("{searchTerms}", query)+"'>Go</a>");
-
-			//setTimeout(function(){window.location = searchUrl.replace("{searchTerms}", query);}, 5000);
-			//window.location = searchUrl.replace("{searchTerms}", query);
-		}
-		
-		
+			// following timeOut is used so that user is redirected to search engine from where user can click
+			// back button to come back to this page
+			setTimeout(function(url){window.location=url},1, searchUrl.replace("{searchTerms}", query));
+		}		
 	}
 	else
 	{
@@ -272,6 +294,8 @@ function loaded()
 	overlayDropText.ondrop=overlayDropTextDragdrop;
 
 	overlayDropText.addEventListener("dragdrop", overlayDropTextDragdrop, false);
+	
+	//var t=setTimeout("window.alert('5 seconds!')",5000);
 }
 
 function getBrowser()
@@ -480,7 +504,5 @@ function addIcon(x, y, url)
 </div>
 </body>
 <script>
-// Script here works
-// alert('testing');
 </script>
 </html>

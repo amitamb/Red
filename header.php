@@ -10,12 +10,17 @@
 <body>
 
 <div id="topLogo">
-<table><tr><td>
+<table width="100%"><tr><td style="width:60px; ">
 <img src="img/logo.png" style="padding-right:10px;opacity:0.2;" />
 </td>
 <td>
 <h1>Red</h1>
 <sub>Making surfing the web easy</sub>
+</td>
+<td align="right">
+<form onsubmit="window.location='search#'+document.getElementById('q').value;return false;">
+<input type="text" id="q" size="25" /><button>Search</button>
+</form>
 </td>
 </tr>
 </table>
