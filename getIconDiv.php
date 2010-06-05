@@ -33,7 +33,7 @@ $iconDivStyle["position"] = "absolute";
 // Width and height should divide 250
 ////////
 
-$width = 50;
+$width = 125;
 $height = 50;
 
 $iconDivStyle["width"] = $width."px";
@@ -47,9 +47,6 @@ $apparentTop = ($y - ($height / 2));
 $actualLeft = $x - ($x % $width);
 $actualTop = $y - ($y % $height);
 
-print $actualLeft."<br>";
-print $actualTop;
-
 $iconDivStyle["left"] = $actualLeft."px";
 $iconDivStyle["top"] = $actualTop."px";
 
@@ -61,11 +58,11 @@ $iconImgStyle["border"] = "0px";
 
 $iconImgStyle["position"] = "absolute";
 
-$iconImgStyle["top"] = "0px";
-$iconImgStyle["left"] = "0px";
+$iconImgStyle["top"] = "5px";
+$iconImgStyle["left"] = "5px";
 
-$iconImgStyle["width"] = "100%";
-$iconImgStyle["height"] = "100%";
+//$iconImgStyle["width"] = "100%";
+//$iconImgStyle["height"] = "100%";
 
 $overlayImgStyle = array();
 
@@ -91,6 +88,10 @@ if (array_key_exists("v", $queryParts))
 
 //$iconUrl = "http://i2.ytimg.com/vi/$videoId/default.jpg";
 
+$targetFrame = $_GET["targetFrame"];
+
+//print $targetFrame;
+
 ?>
 
 <div style="<?
@@ -101,7 +102,7 @@ foreach ($iconDivStyle as $key=>$value)
 }
 
 ?>">
-<a href="<? print $url; ?>" onclick="return false;">
+<a href="<? print $url; ?>" target="<? print $targetFrame; ?>" onclick="">
 <img style="<?
 
 foreach ($iconImgStyle as $key=>$value)

@@ -1,6 +1,7 @@
 <html>
 <head>
 
+<link rel="search" type="application/opensearchdescription+xml" title="Red" href="RedSearchPlugin.xml">
 <link href="global.css" media="screen" rel="stylesheet" type="text/css" />
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /> 
 
