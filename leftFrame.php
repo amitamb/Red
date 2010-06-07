@@ -2,18 +2,12 @@
 require_once("autoInclude.php");
 require_once("sessionStart.php");
 
-// Following is a special code
-
-if ($_GET["keyword"] == "youtube")
-{
-	header("location:youtube.php?keyword=youtube");
-}
-
 ?>
 
 <html>
 <head>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
+<script type="text/javascript" src="defaultHandler.js"></script>
 <script>
 
 ///////////////
@@ -53,22 +47,7 @@ function showDebug(msg)
 	debugText.innerHTML = msg;
 }
 
-function setUrlTitle(url, elementId)
-{
-	$.getJSON(
-		"http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22"+ encodeURIComponent(url) +"%22%20and%20xpath%3D'%2F%2Ftitle'&format=json&callback=?",
-		function(data){	
-			if (data.query)
-			if (data.query.results)
-			if (data.query.results.title != null && data.query.results.title != "")
-			{
-				element = document.getElementById(elementId);
 
-				element.innerHTML = data.query.results.title;
-			}
-		}
-	);
-}
 
 function linkEnter(x, y)
 {
@@ -87,16 +66,12 @@ function linkExit()
 
 function linkDropped(x, y, url)
 {
-	//showDebug('dropped'+x+y+url);
-	
 	var insideUrl = getQueryParam(url, "url");
 	
 	if (insideUrl != null)
 	{
 		url = unescape(insideUrl);
 	}
-	
-	showLink(x, y, url);
 
 	$.getJSON(
 		"link.php?action=add&keyword="+keyword+"&x="+x+"&y="+y+"&url="+url,
@@ -105,31 +80,8 @@ function linkDropped(x, y, url)
 			// do nothing with it
 		}
 	);
-}
-
-function getNewId(prefix)
-{
-	if (! this.currentId) this.currentId = 0;
-
-	this.currentId++;
 	
-	return prefix + String(this.currentId);
-}
-
-function showLink(x, y, url)
-{
-	var links = document.getElementById("links");
-
-	var newLink = document.createElement('a');
-	newLink.innerHTML = url;
-	newLink.target = "searchFrame";
-	newLink.href = url;
-	var id = getNewId("link");
-	newLink.id = id;
-	
-	links.appendChild(newLink);
-	setUrlTitle(url, id);
-	links.innerHTML += "<br>";
+	showLink(x, y, url);
 }
 
 </script>

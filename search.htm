@@ -270,7 +270,9 @@ function checkUrlForAnchor()
 			// set sidebarIframe url
 			var leftDivFrame = document.getElementById("leftDivFrame");
 			
-			leftDivFrame.src = "menu.php?keyword="+matchedKeyword;
+			//leftDivFrame.src = "menu.php?keyword="+matchedKeyword;
+			
+			leftDivFrame.src = "leftFrame.php?keyword="+matchedKeyword;
 		}
 		else
 		{
@@ -338,7 +340,7 @@ function getBrowser()
 
 function showDebug(msg)
 {
-	document.title = msg;
+	//document.title = msg;
 	// var debugText = document.getElementById("debugText");
 	
 	//debugText.innerHTML = msg;
