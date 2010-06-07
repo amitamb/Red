@@ -18,12 +18,16 @@ String.prototype.startsWith = function(str)
 // returns "" if no query found
 function getQuery()
 {
-	var parts = String(window.location).split("#");
+	var locationStr = String(window.location);
 	
-	if (parts.length > 1)
+	var hashLocation = locationStr.indexOf("#");
+	
+	if (hashLocation != -1)
 	{
-		var query = parts[1];
+		var anchorPart = locationStr.substr(hashLocation + 1);
 		
+		var query = anchorPart;
+
 		return query;
 	}
 	else

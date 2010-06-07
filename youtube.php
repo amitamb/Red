@@ -2,13 +2,6 @@
 require_once("autoInclude.php");
 require_once("sessionStart.php");
 
-// Following is a special code
-
-if ($_GET["keyword"] == "youtube")
-{
-	header("location:youtube.php?keyword=youtube");
-}
-
 ?>
 
 <html>
@@ -53,41 +46,23 @@ function showDebug(msg)
 	debugText.innerHTML = msg;
 }
 
-function setUrlTitle(url, elementId)
-{
-	alert('f');
-	
-	element.innerHTML = "asfasf!@#";
-	
-	$.getJSON(
-		"http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22http%3A%2F%2Fnews.ycombinator.com%2F%22%20and%20xpath%3D'%2F%2Ftitle'&format=json&callback=?",
-		function(data){			
-			element = document.getElementById(elementId);
-
-			element.innerHTML = data.query.results.title;
-		}
-	);
-}
-
 function linkEnter(x, y)
 {
-	//showDebug(document.location+x+y);
+	showDebug(document.location+x+y);
 }
 
 function linkDragging(x, y)
 {
-	//showDebug(x +","+y);
+	showDebug(x +","+y);
 }
 
 function linkExit()
 {
-	//showDebug("Exit");
+	showDebug("Exit");
 }
 
 function linkDropped(x, y, url)
 {
-	//showDebug('dropped'+x+y+url);
-	
 	var insideUrl = getQueryParam(url, "url");
 	
 	if (insideUrl != null)
@@ -109,19 +84,28 @@ function linkDropped(x, y, url)
 function showLink(x, y, url)
 {
 	var links = document.getElementById("links");
+	
+	var ht = 80;
+	var wd = 125;
+	
+	var divLeft= x - (x % wd), divTop = y - (y % ht);
+	
+	var videoId = getQueryParam(url, "v");
+	
+	var target = "searchFrame";
+	
+	
+
+	var divHtml = "<div style='position:absolute;left:"+divLeft+"px;top:"+divTop+"px;'><a target='"+target+"' style='display:block;' href='"+url+"'><img style='position:absolute;left:0px;top0px;width:"+(wd - 16)+"px;height:"+(ht - 16)+"px;' src='http://i2.ytimg.com/vi/"+videoId+"/default.jpg' />"+title+"</a></div>";
 
 	var newLink = document.createElement('a');
 	newLink.innerHTML = url;
 	newLink.target = "searchFrame";
 	newLink.href = url;
-	newLink.id = "test1";
 	
-	element = links.appendChild(newLink);
-
-	element.innerHTML = "Test1";	
-	setUrlTitle("http://www.rediff.com", 'test1');
+	//links.appendChild(newLink);
 	
-	links.innerHTML += "<br>";
+	links.innerHTML += divHtml;
 }
 
 </script>
@@ -154,7 +138,6 @@ No debug text
 -->
 </div>
 <div id="links">
-
 </div>
 </body>
 </html>
