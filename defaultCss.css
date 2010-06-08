@@ -1,0 +1,6 @@
+span.otherLinks{}
+span.otherLinks a{font-size:70%;color:black;}
+
+div.linkClass{width:100%;margin:5px;margin-top:15px;}
+
+div.linkClass a{display:block;height:2.5em;overflow:hidden;}

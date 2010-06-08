@@ -5,11 +5,23 @@ function setUrlTitle(url, elementId)
 		function(data){	
 			if (data.query)
 			if (data.query.results)
+			// Check specified below for typeof == "string" is for twitter 
 			if (data.query.results.title != null && data.query.results.title != "")
 			{
-				element = document.getElementById(elementId);
-
-				element.innerHTML = data.query.results.title;
+				var title = "";
+				if ((typeof data.query.results.title) == "string")
+				{
+					title = data.query.results.title;
+				}
+				else if (data.query.results.title.content)
+				{
+					title = data.query.results.title.content;
+				}
+				
+				if (title != "")
+				{
+					$("#"+elementId+" a:first").html(title);
+				}
 			}
 		}
 	);
@@ -24,24 +36,23 @@ function getNewId(prefix)
 	return prefix + String(this.currentId);
 }
 
+function initI()
+{
+	alert("Init");
+}
+
 function showLink(x, y, url)
 {
 	var links = document.getElementById("links");
 
-	var newLink = document.createElement('a');
-	newLink.innerHTML = url;
-	newLink.target = "searchFrame";
-	newLink.href = url;
 	var id = getNewId("link");
-	newLink.id = id;
 	
-	// set style attributes
+	var mainLinkHtml = "<a href='"+url+"' target='searchFrame'>"+url+"</a>";
 	
-	links.appendChild(newLink);
+	var otherLinksSpan = "<span class='otherLinks'><a href='#' onclick=\"removeLink('"+id+"')\">Close</a></span>";
+	
+	var mainLinkDivHtml = "<div id='"+id+"' class='linkClass'>"+ mainLinkHtml + otherLinksSpan + "</div>";
+
 	setUrlTitle(url, id);
-	links.innerHTML += "<br>";
-	
-	alert(parent.window);
-	
-	alert("as");
+	links.innerHTML += mainLinkDivHtml;
 }

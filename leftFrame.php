@@ -7,7 +7,11 @@ require_once("sessionStart.php");
 <html>
 <head>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
+
 <script type="text/javascript" src="defaultHandler.js"></script>
+<!--
+<script type="text/javascript" src="http://www.temilan.com/Red/defaultHandler.js"></script>
+-->
 <script>
 
 ///////////////
@@ -87,6 +91,7 @@ function linkDropped(x, y, url)
 </script>
 <script>
 $(document).ready(function(){
+	
 <?
 
 $links = Link::getAll($sessionId);
@@ -102,6 +107,7 @@ print "showLink('".$link["x"]."','".$link["y"]."','".$link["url"]."');";
 </script>
 <script type="text/javascript" src="communication.js"></script>
 <link href="global.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="defaultCss.css" media="screen" rel="stylesheet" type="text/css" />
 <style>
 body{text-align:left;}
 a.bookmarkLink{}
@@ -114,6 +120,15 @@ No debug text
 -->
 </div>
 <div id="links">
+
+<!--
+<div id='someid' class='linkClass'>
+<a href='url' target='searchFrame'>Url/title Comes here</a>
+<span class='otherLinks'>
+<a href='#' onclick="removeLink('someId')">Close</a>
+</span>
+</div>
+-->
 
 </div>
 </body>

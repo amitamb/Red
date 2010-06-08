@@ -100,18 +100,6 @@ function getCookie(c_name)
 	return "";
 }
 
-function setSidebarTitleAndOther(title, query)
-{
-	var titleDiv = document.getElementById("pageTitle");
-
-	titleDiv.innerHTML = "#"+title;
-	
-	// also set remaining portion of the query
-	var restQueryDiv = document.getElementById("restQuery");
-
-	restQueryDiv.innerHTML = query;	
-}
-
 function getKeywordsArrayLocal()
 {
 	var username = getCookie("username");
@@ -252,7 +240,6 @@ function checkUrlForAnchor()
 
 	if (query != "")
 	{	
-		//alert("as");
 		// if query contains hot keywords
 		// then use custom search page otherwise forward to default search engine
 		var keywordsArray = getKeywordsArray();
@@ -263,16 +250,8 @@ function checkUrlForAnchor()
 		
 			// For version 1.0 only google search will be supported as default search
 			searchFrame.src = searchUrl;
-		
-			// also set sidebar title
-			setSidebarTitleAndOther(matchedKeyword, unescape(query));
 			
-			// set sidebarIframe url
-			var leftDivFrame = document.getElementById("leftDivFrame");
-			
-			//leftDivFrame.src = "menu.php?keyword="+matchedKeyword;
-			
-			leftDivFrame.src = "leftFrame.php?keyword="+matchedKeyword;
+			showLeftMenu(matchedKeyword);
 		}
 		else
 		{
@@ -286,33 +265,19 @@ function checkUrlForAnchor()
 	else
 	{
 		searchFrame.src = "http://www.google.com/";
-		//searchFrame.src = "testSearchPage.php";
+		
+		showLeftMenu("");
 	}
 }
 
 function loaded()
-{
+{	
 	checkUrlForAnchor();
 	
 	// following check is added to track changes in anchor (after #) part of
 	// the url
 	// Changes in anchor does no cause page reload so it is important to check anchor regularly for any changes
 	setInterval('checkUrlForAnchor()',100);
-
-	var overlayDropText = document.getElementById("overlayDropText");
-
-	overlayDropText.ondragenter=overlayDropTextDragEnter;
-	overlayDropText.ondragover=overlayDropTextDragOver;
-	overlayDropText.ondragleave=overlayDropTextDragLeave;
-
-	/////////////
-	// Firefox supports ondrop
-	// but used for clearing interval i.e. clearing tracker which checks if drop is completed
-	overlayDropText.ondrop=overlayDropTextDragdrop;
-
-	//overlayDropText.addEventListener("dragdrop", overlayDropTextDragdrop, false);
-	
-	//var t=setTimeout("window.alert('5 seconds!')",5000);
 }
 
 function getBrowser()
@@ -364,11 +329,6 @@ function dropTracker()
 		overlayDropText.value = "";
 		linkDropped(curDropX, curDropY, url);
 	}
-	
-	//overlayDropText.value = "test";
-	showDebug("asd");
-	
-	//showDebug(overlayDropText.value);
 }
 
 function overlayDropTextDragEnter(event)
@@ -527,14 +487,14 @@ function addIcon(x, y, url, loadIntoFrame)
 	xmlhttp.send();
 }
 
-
-
-
 </script>
 
 <style>
 *{margin:0px;padding:0px;}
+table,td,tr{padding:0px;margin:0px;}
+
 body{width:100%;height:100%;font:80% helvetica, arial, sans-serif;}
+
 #bodyDiv{width:100%;height:100%;}
 #topTable{width:100%;height:100%;border:0px;padding:0px;border-spacing:0px;}
 #topTable tr{border:2px solid;}
@@ -546,26 +506,31 @@ body{width:100%;height:100%;font:80% helvetica, arial, sans-serif;}
 *{z-index:0;}
 #overlayDropText{position:absolute;z-index:3;left:0px;top:0px;border:0px;width:100%;height:100%;background-color:transparent;color:transparent;font-size:0px;cursor:default;}
 
-/*
-#overlayDropText{position:absolute;z-index:3;left:0px;top:0px;border:2px;width:100%;height:100%;background-color:blue;opacity:0.2;color:black;font-size:10px;cursor:default;}
-*/
-
-/*Important here that width is fixed to 250 not relative*/
 #leftDivContent{position:relative;width:100%;height:100%;}
 
 #leftDivContent table{width:100%;height:100%;border-spacing:0px;}
 #debugText{}
-#leftDivFrame{position:absolute;top:0px;left:0px;border:0px;width:100%;height:100%;z-index:0;overflow:hidden;}
+#leftDivFrame{position:absolute;top:0px;left:0px;border:0px;width:100%;height:100%;z-index:0;overflow-x:hidden;}
 
-table,td,tr{padding:0px;margin:0px;}
+#leftLogo{display:block;margin:0px;}
+#leftLogo a {text-deoration:none;}
+#leftLogo a img{border:0px;width:25px;height:25px;}
+
+#titleAndQuery{display:inline;}
 
 #pageTitle{font-size:120%;font-weight:bold;color:#313131;}
 #restQuery{font-size:70%;color:#515151;}
 
+#commonLinks{padding:5px;}
+#commonLinks span{display:inline;border:1px solid;}
+
+#sessionNav{font-size:70%;text-align:center;}
+
+#shadowLeftDivContent{display:none;}
 </style>
 
 </head>
-<body onload="loaded()">
+<body onload="">
 <div id="bodyDiv">
 <table id="topTable">
 	<tr>
@@ -575,21 +540,42 @@ table,td,tr{padding:0px;margin:0px;}
 					<table>
 						<tr style="height:20px;">
 							<td>
-							<span id="pageTitle">
-<!--
-								#Title
--->
-							</span><br>
-							<span id="restQuery">
-<!--
-							Rest part of query
--->
-							</span>
-							<div id="searchEngines">
-<!--
-								<span>S1</span>
--->
-							</div>
+								<table border=0>
+									<tr>
+										<td style="width:35px;height:35px;margin:0px;vertical-align:middle;text-align:center;">
+											<span id="leftLogo">
+												<a href="index.php">
+													<img src="img/logo.png" />
+												</a>
+											</span>
+										</td>
+										<td>
+											<span id="pageTitle">
+												<!--{pageTitle}-->
+											</span>
+											<br />
+											<span id="restQuery">
+												<!--{restQuery}-->
+											</span>								
+										</td>
+									</tr>
+									<tr>
+										<td colspan=3>
+											<div id="commonLinks">
+												<!--{commonLinks}-->
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td colspan=3>
+											<div id="sessionNav">
+												<a href="#" style="float:left;">&lt;&lt;Prev</a>
+												<span style="font-weight:bold;">Session</span>
+												<a href="#" style="float:right;">Next&gt;&gt;</a>
+											</div>
+										</td>
+									</tr>
+								</table>
 							</td>
 						</tr>
 						<tr>
@@ -598,10 +584,7 @@ table,td,tr{padding:0px;margin:0px;}
 									<input id="overlayDropText" type="text" value="" />
 									<!-- Following nbsp is a hack to make drag drop work in chrome -->
 									&nbsp;
-									<iframe id="leftDivFrame" src="menu.php?keyword="></iframe>
-<!--
-									<iframe id="leftDivFrame" src="menu.htm"></iframe>
--->
+									<iframe id="leftDivFrame" src="about:blank"></iframe>
 								</div>
 							</td>
 						</tr>
@@ -615,5 +598,78 @@ table,td,tr{padding:0px;margin:0px;}
 </div>
 </body>
 <script>
+
+var shadowLeftDivContentHTML = document.getElementById("leftDivContent").innerHTML;
+
+function setSidebarTitle(title)
+{
+	var titleDiv = document.getElementById("pageTitle");
+
+	titleDiv.innerHTML = "#"+title;
+}
+
+function setRestQuery(value)
+{
+	var restQueryDiv = document.getElementById("restQuery");
+
+	restQueryDiv.innerHTML = value;	
+}
+
+function setCommonLinks()
+{
+	
+}
+
+function setSessionNavigation()
+{
+	
+}
+
+function setLeftFrameSrc(frameUrl)
+{
+	var leftFrame = document.getElementById("leftDivFrame");
+
+	leftFrame.src = frameUrl;
+}
+
+function showLeftMenu(keyword)
+{
+	if (keyword == "")
+	{
+		setSidebarTitle("[Home]");
+		
+		setRestQuery("Rest of query");
+		
+		var frameUrl = "leftFrame.php?keyword="+keyword;
+		setLeftFrameSrc(frameUrl);
+	}
+	else
+	{
+		setSidebarTitle(keyword);
+		
+		setRestQuery("Rest of query");
+		
+		var frameUrl = "leftFrame.php?keyword="+keyword;
+		setLeftFrameSrc(frameUrl);
+	}
+	
+	var overlayDropText = document.getElementById("overlayDropText");
+
+	overlayDropText.ondragenter=overlayDropTextDragEnter;
+	overlayDropText.ondragover=overlayDropTextDragOver;
+	overlayDropText.ondragleave=overlayDropTextDragLeave;
+
+	/////////////
+	// Firefox supports ondrop
+	// but used for clearing interval i.e. clearing tracker which checks if drop is completed
+	overlayDropText.ondrop=overlayDropTextDragdrop;
+}
+
+////////////////
+// Calling loaded here since
+// waiting for body.onLoad will make us
+// wait for iframes
+////////////////
+loaded();
 </script>
 </html>
