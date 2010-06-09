@@ -3,6 +3,12 @@
 class Keyword extends MongoModel
 {
 	const collectionName = "Keyword";
+	
+	// _id
+	// str
+	// userId (/ sessionId)
+	// commonLinks []
+	// homeLinkIndex
 
 	function __construct()
 	{
@@ -19,7 +25,7 @@ class Keyword extends MongoModel
 
 		$keyword = array("str"=>$keyword, "userSessionId"=>$sessionId);
 
-		$collection->save($keyword);	
+		$collection->save($keyword);
 	}
 	
 	public static function remove($sessionId)

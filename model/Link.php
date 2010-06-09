@@ -3,6 +3,13 @@
 class Link extends MongoModel
 {
 	const collectionName = "Link";
+	
+	// _id
+	// keywordId
+	// url
+	// x
+	// y
+	// query
 
 	function __construct()
 	{
@@ -25,15 +32,25 @@ class Link extends MongoModel
 
 		$collection->save($link);
 		
-		return $link;
+		return (string)$link["_id"];
+	}
+	
+	public static function remove($sessionId)
+	{
+		$_id = $_GET['_id'];
+
+		$collection = MongoModel::getCollection(Link::collectionName);
+		
+		$query = array("_id" => new MongoId($_id), "userSessionId"=>$sessionId);
+		
+		//var_dump($query);
+		
+		return $collection->remove($query);		
 	}
 
 	public static function getAll($sessionId)
 	{
 		$keyword = $_GET['keyword'];
-		
-		//print "astasxf";
-		//print $sessionId;
 
 		$collection = MongoModel::getCollection(Link::collectionName);
 		

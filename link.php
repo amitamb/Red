@@ -18,6 +18,12 @@ if (getAction() == "add")
 {
 	print json_encode(Link::add($sessionId));
 }
+else if (getAction() == "remove")
+{
+	print json_encode(Link::remove($sessionId));
+	
+//	print "Remove called".$_GET["_id"];
+}
 else if (getAction() == "enlist")
 {
 	Link::getAll($sessionId);

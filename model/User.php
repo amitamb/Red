@@ -3,6 +3,11 @@
 class User extends MongoModel
 {
 	const collectionName = "User";
+	
+	// _id
+	// username
+	// epassword
+	// email (optional)
 
 	function __construct()
 	{

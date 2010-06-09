@@ -9,9 +9,39 @@ require_once("sessionStart.php");
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
 
 <script type="text/javascript" src="defaultHandler.js"></script>
-<!--
-<script type="text/javascript" src="http://www.temilan.com/Red/defaultHandler.js"></script>
--->
+
+<script>
+
+///////////
+// Support functions for handler
+///////////
+
+function Link()
+{
+	this._id = null;
+	this.url = null;
+	this.x = null;
+	this.y = null;
+	
+	this.remove = function()
+	{
+		$.getJSON(
+		"link.php?action=remove&_id="+this._id,
+		function(data) {
+			// It should return true
+			// alert("Remove return("+data+")");
+		}
+	);
+	}
+	
+	this.close = function()
+	{
+		
+	}
+}
+
+</script>
+
 <script>
 
 ///////////////
@@ -76,16 +106,39 @@ function linkDropped(x, y, url)
 	{
 		url = unescape(insideUrl);
 	}
+	
+	var newLink = new Link();
+	
+	newLink._id = "";
+	newLink.url = url;
+	newLink.x = x;
+	newLink.y = y;
+	
+	showLink(newLink);
 
 	$.getJSON(
 		"link.php?action=add&keyword="+keyword+"&x="+x+"&y="+y+"&url="+url,
 		function(data) {
-			// it will return json encoded link
-			// do nothing with it
+			// it will return id of newly added link _id
+			newLink._id = data;
 		}
 	);
 	
-	showLink(x, y, url);
+	
+}
+
+function showLinkExtra(x, y, url, _id)
+{
+	var newLink = new Link();
+	
+	newLink._id = _id;
+	newLink.url = url;
+	newLink.x = x;
+	newLink.y = y;
+	
+	//alert(newLink.toSource());
+	
+	showLink(newLink);
 }
 
 </script>
@@ -99,7 +152,7 @@ $links = Link::getAll($sessionId);
 foreach ($links as $link)
 {
 	//print "<a class='bookmarkLink' href='".$link["url"]."' >".$link["url"]."</a><br>";
-print "showLink('".$link["x"]."','".$link["y"]."','".$link["url"]."');";
+print "showLinkExtra(".$link["x"].",".$link["y"].",'".$link["url"]."', '".$link["_id"]."');";
 	
 }
 ?>

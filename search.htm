@@ -9,8 +9,6 @@
 ///////////////////
 var matchedKeyword = "";
 
-
-
 String.prototype.startsWith = function(str)
 {return (this.match("^"+str)==str)}
 
@@ -43,8 +41,6 @@ function containsKeyword(query, keywordsArray)
 	var len = keywordsArray.length;
 	
 	query = unescape(query);
-	
-	//alert("processing query:"+query);
 	
 	// replace spaces(" ") with "+" for easy split
 	query = query.replace(" ", "+");
@@ -112,7 +108,7 @@ function getKeywordsArrayLocal()
 	}
 	else
 	{
-		alert("no keywords");
+		//alert("no keywords");
 		return null;
 	}
 	
@@ -220,7 +216,6 @@ function getKeywordsArray()
 function getDefaultSearchEngineUrl()
 {
 	return "http://www.google.com/search?q=" + "{searchTerms}";
-	//return "testSearchPage.php?q=" + "{searchTerms}";
 }
 
 function checkUrlForAnchor()
@@ -251,7 +246,7 @@ function checkUrlForAnchor()
 			// For version 1.0 only google search will be supported as default search
 			searchFrame.src = searchUrl;
 			
-			showLeftMenu(matchedKeyword);
+			showLeftMenu(matchedKeyword, query);
 		}
 		else
 		{
@@ -271,9 +266,9 @@ function checkUrlForAnchor()
 }
 
 function loaded()
-{	
+{
 	checkUrlForAnchor();
-	
+
 	// following check is added to track changes in anchor (after #) part of
 	// the url
 	// Changes in anchor does no cause page reload so it is important to check anchor regularly for any changes
@@ -530,7 +525,7 @@ body{width:100%;height:100%;font:80% helvetica, arial, sans-serif;}
 </style>
 
 </head>
-<body onload="">
+<body onload="alert'loaded'()">
 <div id="bodyDiv">
 <table id="topTable">
 	<tr>
@@ -612,7 +607,7 @@ function setRestQuery(value)
 {
 	var restQueryDiv = document.getElementById("restQuery");
 
-	restQueryDiv.innerHTML = value;	
+	restQueryDiv.innerHTML = unescape(value);	
 }
 
 function setCommonLinks()
@@ -632,13 +627,13 @@ function setLeftFrameSrc(frameUrl)
 	leftFrame.src = frameUrl;
 }
 
-function showLeftMenu(keyword)
-{
+function showLeftMenu(keyword, query)
+{	
 	if (keyword == "")
 	{
 		setSidebarTitle("[Home]");
 		
-		setRestQuery("Rest of query");
+		setRestQuery(query);
 		
 		var frameUrl = "leftFrame.php?keyword="+keyword;
 		setLeftFrameSrc(frameUrl);
@@ -647,7 +642,7 @@ function showLeftMenu(keyword)
 	{
 		setSidebarTitle(keyword);
 		
-		setRestQuery("Rest of query");
+		setRestQuery(query);
 		
 		var frameUrl = "leftFrame.php?keyword="+keyword;
 		setLeftFrameSrc(frameUrl);

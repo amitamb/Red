@@ -41,18 +41,28 @@ function initI()
 	alert("Init");
 }
 
-function showLink(x, y, url)
+function removeLink(id)
+{
+	id2LinkMap[id].remove();
+	$("#"+id).empty().remove();
+}
+
+var id2LinkMap = new Array();
+
+function showLink(newLink)
 {
 	var links = document.getElementById("links");
 
 	var id = getNewId("link");
 	
-	var mainLinkHtml = "<a href='"+url+"' target='searchFrame'>"+url+"</a>";
+	id2LinkMap[id] = newLink;
 	
-	var otherLinksSpan = "<span class='otherLinks'><a href='#' onclick=\"removeLink('"+id+"')\">Close</a></span>";
+	var mainLinkHtml = "<a href='"+newLink.url+"' target='searchFrame'>"+newLink.url+"</a>";
+	
+	var otherLinksSpan = "<span class='otherLinks'><a href='#' onclick=\"removeLink('"+id+"')\">Remove</a></span>";
 	
 	var mainLinkDivHtml = "<div id='"+id+"' class='linkClass'>"+ mainLinkHtml + otherLinksSpan + "</div>";
 
-	setUrlTitle(url, id);
+	setUrlTitle(newLink.url, id);
 	links.innerHTML += mainLinkDivHtml;
 }
