@@ -9,8 +9,29 @@
 ///////////////////
 var matchedKeyword = "";
 
+// set by showLeftMenu
+var keyword;
+var query;
+
+// Set by leftFrame
+var searchSessionId = "";
+
 String.prototype.startsWith = function(str)
 {return (this.match("^"+str)==str)}
+
+function getXMLHttpRequest()
+{
+	if (window.XMLHttpRequest)
+	{
+		// code for IE7+, Firefox, Chrome, Opera, Safari
+		return new XMLHttpRequest();
+	}
+	else
+	{
+		// code for IE6, IE5
+		return new ActiveXObject("Microsoft.XMLHTTP");
+	}
+}
 
 // give the query from window.location i.e. current url
 // returns "" if no query found
@@ -162,7 +183,9 @@ function needKeywordsUpdate()
 // wait for it
 function updateKeywordsArray()
 {
-	var xmlhttp;
+	var xmlhttp = getXMLHttpRequest();
+	
+/*
 	if (window.XMLHttpRequest)
 	{
 		// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -173,6 +196,7 @@ function updateKeywordsArray()
 		// code for IE6, IE5
 		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
 	}
+*/
 
 	// making the call syncronous
 	xmlhttp.open("GET","keywords.php?action=enlist",false); // false
@@ -215,7 +239,9 @@ function getKeywordsArray()
 
 function getDefaultSearchEngineUrl()
 {
-	return "http://www.google.com/search?q=" + "{searchTerms}";
+	//return "http://www.google.com/search?q=" + "{searchTerms}";
+	
+	return "testSearchPage.htm?q=" + "{searchTerms}";
 }
 
 function checkUrlForAnchor()
@@ -241,7 +267,9 @@ function checkUrlForAnchor()
 
 		if ( containsKeyword(query, keywordsArray) )
 		{
-			var searchUrl = "http://www.google.com/search?q=" + query;
+			//var searchUrl = "http://www.google.com/search?q=" + query;
+			
+			var searchUrl = "testSearchPage.htm?q=" + query;
 		
 			// For version 1.0 only google search will be supported as default search
 			searchFrame.src = searchUrl;
@@ -259,7 +287,9 @@ function checkUrlForAnchor()
 	}
 	else
 	{
-		searchFrame.src = "http://www.google.com/";
+		//searchFrame.src = "http://www.google.com/";
+		
+		searchFrame.src = "testSearchPage.htm";
 		
 		showLeftMenu("");
 	}
@@ -436,52 +466,6 @@ function getTargetFrame()
 	return "searchFrame";
 }
 
-//////////////////////////
-// Following code should go into its own iframe
-// Right now supporting only youtube as menuTitle
-//////////////////////////
-
-function addIcon(x, y, url, loadIntoFrame)
-{
-	// some attributes of icon
-	var iWidth = 24, iHeight = 24;
-	
-	// get parent
-	var parentDiv = document.getElementById("leftDivContent");
-	
-	var newIcon = document.createElement('div');
-	newIcon.style.width = iWidth;
-	newIcon.style.height = iHeight;
-	newIcon.style.backgroundColor = 'red';
-	//newIcon.style.opacity = '0.2';
-	newIcon.style.backgroundImage = "url('http://www.reddit.com/favicon.ico')";	
-	
-	var xmlhttp;
-	if (window.XMLHttpRequest)
-	{
-		// code for IE7+, Firefox, Chrome, Opera, Safari
-		xmlhttp=new XMLHttpRequest();
-	}
-	else
-	{
-		// code for IE6, IE5
-		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-	}
-	xmlhttp.onreadystatechange=function()
-	{
-		if (xmlhttp.readyState==4 && xmlhttp.status==200)
-		{
-			//alert(xmlhttp.responseText);
-			
-			//parentDiv.innerHTML += xmlhttp.responseText;
-		}
-	}
-	
-	var targetFrame = getTargetFrame();
-	xmlhttp.open("GET","getIconDiv?"+"url="+encodeURIComponent(url)+"&x="+x+"&y="+y+"&targetFrame="+targetFrame,true);
-	xmlhttp.send();
-}
-
 </script>
 
 <style>
@@ -516,8 +500,9 @@ body{width:100%;height:100%;font:80% helvetica, arial, sans-serif;}
 #pageTitle{font-size:120%;font-weight:bold;color:#313131;}
 #restQuery{font-size:70%;color:#515151;}
 
-#commonLinks{padding:5px;}
+#commonLinks{padding:5px;height:20px;}
 #commonLinks span{display:inline;border:1px solid;}
+#commonLinksFrame{border:0px;width:100%;height:100%;}
 
 #sessionNav{font-size:70%;text-align:center;}
 
@@ -558,15 +543,16 @@ body{width:100%;height:100%;font:80% helvetica, arial, sans-serif;}
 										<td colspan=3>
 											<div id="commonLinks">
 												<!--{commonLinks}-->
+												<iframe id="commonLinksFrame" src="about:blank"></iframe>
 											</div>
 										</td>
 									</tr>
 									<tr>
 										<td colspan=3>
 											<div id="sessionNav">
-												<a href="#" style="float:left;">&lt;&lt;Prev</a>
+												<a href="#" style="float:left;" onclick="prevSession();return false;">&lt;&lt;Prev</a>
 												<span style="font-weight:bold;">Session</span>
-												<a href="#" style="float:right;">Next&gt;&gt;</a>
+												<a href="#" style="float:right;" onclick="nextSession();return false;">Next&gt;&gt;</a>
 											</div>
 										</td>
 									</tr>
@@ -607,12 +593,16 @@ function setRestQuery(value)
 {
 	var restQueryDiv = document.getElementById("restQuery");
 
-	restQueryDiv.innerHTML = unescape(value);	
+	if (value != null)
+	{
+		restQueryDiv.innerHTML = unescape(value);	
+	}
 }
 
-function setCommonLinks()
+function setCommonLinksFrameSrc(url)
 {
-	
+	var commonLinksFrame = document.getElementById("commonLinksFrame");
+	commonLinksFrame.src = url;
 }
 
 function setSessionNavigation()
@@ -628,15 +618,38 @@ function setLeftFrameSrc(frameUrl)
 }
 
 function showLeftMenu(keyword, query)
-{	
+{
+	// set global var
+	window.keyword = keyword;
+	window.query = query;
+	
+	// get session Id for this keyword and query
+	var xmlhttp = getXMLHttpRequest();
+	
+	xmlhttp.onreadystatechange=function()
+	{
+		//alert(xmlhttp.readyState+","+xmlhttp.responseText);
+		if (xmlhttp.readyState==4) // && xmlhttp.status==200)
+		{
+			// set session id in hidden input variable
+			//alert(xmlhttp.responseText);
+		}
+	}
+
+	// making asyncronous call
+	xmlhttp.open("GET", "session.php?action=getSessionByKeyword&keyword="+keyword+"&query="+query, true); // false
+	xmlhttp.send(null);
+
 	if (keyword == "")
 	{
 		setSidebarTitle("[Home]");
 		
 		setRestQuery(query);
 		
-		var frameUrl = "leftFrame.php?keyword="+keyword;
+		var frameUrl = "leftFrame.php?keyword="+keyword+"&query="+query;
 		setLeftFrameSrc(frameUrl);
+		
+		setCommonLinksFrameSrc("commonLinks.php?keyword="+keyword);
 	}
 	else
 	{
@@ -644,8 +657,10 @@ function showLeftMenu(keyword, query)
 		
 		setRestQuery(query);
 		
-		var frameUrl = "leftFrame.php?keyword="+keyword;
+		var frameUrl = "leftFrame.php?keyword="+keyword+"&query="+query;
 		setLeftFrameSrc(frameUrl);
+		
+		setCommonLinksFrameSrc("commonLinks.php?keyword="+keyword);
 	}
 	
 	var overlayDropText = document.getElementById("overlayDropText");
@@ -658,6 +673,22 @@ function showLeftMenu(keyword, query)
 	// Firefox supports ondrop
 	// but used for clearing interval i.e. clearing tracker which checks if drop is completed
 	overlayDropText.ondrop=overlayDropTextDragdrop;
+}
+
+function prevSession()
+{
+	// alert("Previus session");
+	
+	// setCommonLinksFrameSrc("commonLinks.php?keyword=");
+	
+	var frameUrl = "leftFrame.php?keyword="+keyword+"&query="+query+"&searchSessionId="+searchSessionId+"&navigateTo="+"prev";
+	setLeftFrameSrc(frameUrl);
+}
+
+function nextSession()
+{
+	var frameUrl = "leftFrame.php?keyword="+keyword+"&query="+query+"&searchSessionId="+searchSessionId+"&navigateTo="+"next";
+	setLeftFrameSrc(frameUrl);
 }
 
 ////////////////

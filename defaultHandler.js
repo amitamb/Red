@@ -20,11 +20,18 @@ function setUrlTitle(url, elementId)
 				
 				if (title != "")
 				{
-					$("#"+elementId+" a:first").html(title);
+					$("#"+elementId+" a:first span").html(title);
 				}
 			}
 		}
 	);
+}
+
+// supporting function
+// gives hostname part of url
+function getHostname(str) {
+	var re = new RegExp('^(?:f|ht)tp(?:s)?\://([^/]+)', 'im');
+	return str.match(re)[1].toString();
 }
 
 function getNewId(prefix)
@@ -57,11 +64,15 @@ function showLink(newLink)
 	
 	id2LinkMap[id] = newLink;
 	
-	var mainLinkHtml = "<a href='"+newLink.url+"' target='searchFrame'>"+newLink.url+"</a>";
+	var hostName = getHostname(newLink.url);
+	
+	var iconUrl = "http://s2.googleusercontent.com/s2/favicons?domain=" + hostName;
+
+	var mainLinkHtml = "<a class='titleLink' href='"+newLink.url+"' target='searchFrame'><img class='titleLinkIcon' src='"+iconUrl+"' />&nbsp;<span>"+newLink.url+"</span></a><a class='hostLink' href='http://" + hostName + "' target='searchFrame'>" + hostName + "</a>";
 	
 	var otherLinksSpan = "<span class='otherLinks'><a href='#' onclick=\"removeLink('"+id+"')\">Remove</a></span>";
 	
-	var mainLinkDivHtml = "<div id='"+id+"' class='linkClass'>"+ mainLinkHtml + otherLinksSpan + "</div>";
+	var mainLinkDivHtml = "<div id='"+id+"' class='linkClass'>"+ mainLinkHtml + "<br />" + otherLinksSpan + "</div>";
 
 	setUrlTitle(newLink.url, id);
 	links.innerHTML += mainLinkDivHtml;

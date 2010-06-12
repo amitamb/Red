@@ -14,17 +14,21 @@ function getAction()
 	}
 }
 
-if (getAction() == "add")
+if (getAction() == "getSessionByKeyword")
 {
-	print json_encode(Link::add($sessionId));
+	// return raw sessionId
+	print json_encode(Session::getId($sessionId));
 }
 else if (getAction() == "remove")
 {
 	print json_encode(Link::remove($sessionId));
+	
+//	print "Remove called".$_GET["_id"];
 }
 else if (getAction() == "enlist")
 {
 	Link::getAll($sessionId);
 }
+
 
 ?>

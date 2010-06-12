@@ -18,9 +18,9 @@ class Keyword extends MongoModel
 	public static function add($sessionId)
 	{
 		$keyword = $_POST['keyword'];
-		
+
 		$collection = MongoModel::getCollection(Keyword::collectionName);
-		
+
 		$collection->ensureIndex(array("str"=>1, "userSessionId"=>1));
 
 		$keyword = array("str"=>$keyword, "userSessionId"=>$sessionId);

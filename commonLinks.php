@@ -1,17 +1,11 @@
 <?
 require_once("autoInclude.php");
 require_once("sessionStart.php");
-
 ?>
 
 <html>
 <head>
-<!--
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
--->
-<script type="text/javascript" src="/consle/scripts/jquery.min.js"></script>
-
-<script type="text/javascript" src="defaultHandler.js"></script>
 
 <script>
 
@@ -19,7 +13,7 @@ require_once("sessionStart.php");
 // Support functions for handler
 ///////////
 
-function Link()
+function CommonLink()
 {
 	this._id = null;
 	this.url = null;
@@ -51,13 +45,9 @@ function Link()
 //public var
 ///////////////
 var keyword;
-var query;
-var searchSessionId;
-
 <?
 
 print "keyword='".$_GET["keyword"]."';";
-print "query='".$_GET["query"]."';";
 
 ?>
 
@@ -124,12 +114,17 @@ function linkDropped(x, y, url)
 	showLink(newLink);
 
 	$.getJSON(
-		"link.php?action=add&keyword="+keyword+"&query="+query+"&searchSessionId="+searchSessionId+"&x="+x+"&y="+y+"&url="+url,
+		"link.php?action=add&keyword="+keyword+"&x="+x+"&y="+y+"&url="+url,
 		function(data) {
 			// it will return id of newly added link _id
 			newLink._id = data;
 		}
 	);
+}
+
+function addCommonLink(newCommonLink)
+{
+	var url = newCommonLink.url;
 	
 	
 }
@@ -143,16 +138,44 @@ function showLinkExtra(x, y, url, _id)
 	newLink.x = x;
 	newLink.y = y;
 	
+	//alert(newLink.toSource());
+	
 	showLink(newLink);
 }
 
 </script>
-<script type="text/javascript" src="communication.js"></script>
+<script>
+$(document).ready(function(){
+	
+<?
+
+/*
+$links = Link::getAll($sessionId);
+
+foreach ($links as $link)
+{
+	//print "<a class='bookmarkLink' href='".$link["url"]."' >".$link["url"]."</a><br>";
+print "showLinkExtra(".$link["x"].",".$link["y"].",'".$link["url"]."', '".$link["_id"]."');";
+	
+}
+*/
+?>
+});
+</script>
 <link href="global.css" media="screen" rel="stylesheet" type="text/css" />
-<link href="defaultCss.css" media="screen" rel="stylesheet" type="text/css" />
 <style>
-body{text-align:left;}
-a.bookmarkLink{}
+*{margin:0px;padding:0px;}
+
+body{text-align:center;}
+
+#commonLinks{}
+
+div.commonLink{display:inline;}
+a.commonLinkLink{}
+
+img.commonLinkIcon{width:16px; height:16px; border:0px;display:inline;}
+
+span.commonLinkIconText{font-size:80%;color:#898989;background-color:red;}
 </style>
 </head>
 <body>
@@ -161,62 +184,15 @@ a.bookmarkLink{}
 No debug text
 -->
 </div>
-<div id="links">
-
-
+<div id="commonLinks">
+<!--
+	<div class="commonLink">
+		<a target="searchFrame" class="commonLinkLink" href="http://www.google.com/"><table><tr><td><img src="http://www.google.com/favicon.ico" alt="Google" /><td><span class="commonLinkIconText">Google</span></table></a>
+	</div>
+-->
+	<div class="commonLink">
+		<a target="searchFrame" class="commonLinkLink" href="http://www.google.com/"><img src="http://www.google.com/favicon.ico" alt="Google" /></a>
+	</div>
 </div>
 </body>
-<script>
-/*
-$(document).ready(function(){
-	
-*/
-
-<?
-// First of all get sessionId
-
-if (isset($_GET["searchSessionId"]))
-{
-	$searchSession = Session::navigateTo($sessionId);
-	if ($searchSession == null)
-	{
-		// print "alert('No ".$_GET["navigateTo"]." session available');";
-		$searchSession = Session::getById($sessionId);
-	}
-}
-else
-{
-	$searchSession = Session::getByKeywordAndQuery($sessionId);
-}
-
-//$links = Link::getAll($sessionId);
-print "searchSessionId='".$searchSession["_id"]."';";
-
-?>
-
-// Also setting searchSessionId in parent docuement
-if (parent != null)
-{
-	parent.searchSessionId = '<? print $searchSession["_id"]; ?>';
-	parent.query = '<? print $searchSession["query"]; ?>';
-	parent.setRestQuery('<? print $searchSession["query"]; ?>');
-}
-
-<?
-
-	$links = Link::getAllBySearchSessionId($sessionId, $searchSession["_id"]);
-
-	if ($links != null)
-	foreach ($links as $link)
-	{
-		print "showLinkExtra(".$link["x"].",".$link["y"].",'".$link["url"]."', '".$link["_id"]."');";
-	}
-
-?>
-
-/*
-});
-*/
-
-</script>
 </html>

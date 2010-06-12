@@ -1,6 +1,9 @@
+div.linkClass{width:100%;padding:5px;margin-top:0px;border-bottom:1px solid;}
+
+a.titleLink{display:block;max-height:2.5em;overflow:hidden;}
+a.hostLink{display:inline;font-size:70%;color:#717171;overflow:hidden;}
+
 span.otherLinks{}
-span.otherLinks a{font-size:70%;color:black;}
+span.otherLinks a{font-size:70%;color:black;display:inline;}
 
-div.linkClass{width:100%;margin:5px;margin-top:15px;}
-
-div.linkClass a{display:block;height:2.5em;overflow:hidden;}
+img.titleLinkIcon{border:0px;height:16px;width:16px;padding-top:0px;}
