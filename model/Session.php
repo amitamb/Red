@@ -42,7 +42,9 @@ class Session extends MongoModel
 		
 		if ($session == null)
 		{
-			$session = $collection->insert($query);
+			$collection->insert($query);
+			
+			$session = $query;
 		}
 		
 		return $session;

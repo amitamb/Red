@@ -64,6 +64,12 @@ function containsKeyword(query, keywordsArray)
 	query = unescape(query);
 	
 	// replace spaces(" ") with "+" for easy split
+	
+	// TODO: Fix bug...
+	// Replaces only one instanc of space
+	// replace all
+	query = query.replace(" ", "+");
+	query = query.replace(" ", "+");
 	query = query.replace(" ", "+");
 
 	var queryParts = query.split("+");
@@ -81,7 +87,7 @@ function containsKeyword(query, keywordsArray)
 			return true;
 		}
 	}
-	
+
 	for (var i=0;i<len;i++)
 	{
 		var keyword = keywordsArray[i];
@@ -449,7 +455,7 @@ function linkDragging(x, y)
 
 function linkExit()
 {
-	document.title = "Exit";
+	// document.title = "Exit";
 	linkExitEventHandler();
 }
 
@@ -677,10 +683,6 @@ function showLeftMenu(keyword, query)
 
 function prevSession()
 {
-	// alert("Previus session");
-	
-	// setCommonLinksFrameSrc("commonLinks.php?keyword=");
-	
 	var frameUrl = "leftFrame.php?keyword="+keyword+"&query="+query+"&searchSessionId="+searchSessionId+"&navigateTo="+"prev";
 	setLeftFrameSrc(frameUrl);
 }

@@ -195,6 +195,7 @@ print "searchSessionId='".$searchSession["_id"]."';";
 ?>
 
 // Also setting searchSessionId in parent docuement
+//if (parent != null)
 if (parent != null)
 {
 	parent.searchSessionId = '<? print $searchSession["_id"]; ?>';
