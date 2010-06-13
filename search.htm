@@ -245,9 +245,9 @@ function getKeywordsArray()
 
 function getDefaultSearchEngineUrl()
 {
-	//return "http://www.google.com/search?q=" + "{searchTerms}";
+	return "http://www.google.com/search?q=" + "{searchTerms}";
 	
-	return "testSearchPage.htm?q=" + "{searchTerms}";
+	//return "testSearchPage.htm?q=" + "{searchTerms}";
 }
 
 function checkUrlForAnchor()
@@ -273,9 +273,9 @@ function checkUrlForAnchor()
 
 		if ( containsKeyword(query, keywordsArray) )
 		{
-			//var searchUrl = "http://www.google.com/search?q=" + query;
+			var searchUrl = "http://www.google.com/search?q=" + query;
 			
-			var searchUrl = "testSearchPage.htm?q=" + query;
+			//var searchUrl = "testSearchPage.htm?q=" + query;
 		
 			// For version 1.0 only google search will be supported as default search
 			searchFrame.src = searchUrl;
@@ -293,9 +293,9 @@ function checkUrlForAnchor()
 	}
 	else
 	{
-		//searchFrame.src = "http://www.google.com/";
+		searchFrame.src = "http://www.google.com/";
 		
-		searchFrame.src = "testSearchPage.htm";
+		//searchFrame.src = "testSearchPage.htm";
 		
 		showLeftMenu("");
 	}
