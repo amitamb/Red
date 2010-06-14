@@ -491,7 +491,7 @@ body{width:100%;height:100%;font:80% helvetica, arial, sans-serif;}
 *{z-index:0;}
 #overlayDropText{position:absolute;z-index:3;left:0px;top:0px;border:0px;width:100%;height:100%;background-color:transparent;color:transparent;font-size:0px;cursor:default;}
 
-#leftDivContent{position:relative;width:100%;height:100%;}
+#leftDivContent{position:relative;width:100%;height:100%;visibility:hidden;}
 
 #leftDivContent table{width:100%;height:100%;border-spacing:0px;}
 #debugText{}
@@ -511,8 +511,6 @@ body{width:100%;height:100%;font:80% helvetica, arial, sans-serif;}
 #commonLinksFrame{border:0px;width:100%;height:100%;}
 
 #sessionNav{font-size:70%;text-align:center;}
-
-#shadowLeftDivContent{display:none;}
 </style>
 
 </head>
@@ -586,8 +584,6 @@ body{width:100%;height:100%;font:80% helvetica, arial, sans-serif;}
 </body>
 <script>
 
-var shadowLeftDivContentHTML = document.getElementById("leftDivContent").innerHTML;
-
 function setSidebarTitle(title)
 {
 	var titleDiv = document.getElementById("pageTitle");
@@ -625,6 +621,10 @@ function setLeftFrameSrc(frameUrl)
 
 function showLeftMenu(keyword, query)
 {
+	// set leftDivContent to show
+	var leftDivContent = document.getElementById("leftDivContent");
+	leftDivContent.style.visibility = "visible";
+	
 	// set global var
 	window.keyword = keyword;
 	window.query = query;
