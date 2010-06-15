@@ -63,6 +63,11 @@ $(document).ready(function(){
 });
 
 </script>
+
+<div style="text-align:center;">
+Example keywords: mumbai, java, php
+</div>
+
 <div id="tableDiv">
 <table border="1" width="400px">
 
@@ -74,7 +79,7 @@ $(document).ready(function(){
 </td>
 <td>
 
- <button id="addKeyword">Add</button>
+<button id="addKeyword">Add</button>
 
 </form>
 </td></tr>

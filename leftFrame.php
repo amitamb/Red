@@ -186,6 +186,11 @@ if (isset($_GET["searchSessionId"]))
 }
 else
 {
+	// keyword & query is set
+	// strip # from the query keyword
+	// convert ""
+	//query = 
+	
 	$searchSession = Session::getByKeywordAndQuery($sessionId);
 }
 

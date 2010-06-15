@@ -1,4 +1,8 @@
 <html>
+<head>
+
+<title>Red - Making surfing the web easy</title>
+
 <link rel="search" type="application/opensearchdescription+xml" title="Red" href="RedSearchPlugin.xml">
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /> 
 
@@ -62,15 +66,13 @@ function containsKeyword(query, keywordsArray)
 	var len = keywordsArray.length;
 	
 	query = unescape(query);
-	
+	query = query.toLowerCase();
+
 	// replace spaces(" ") with "+" for easy split
 	
-	// TODO: Fix bug...
-	// Replaces only one instanc of space
 	// replace all
-	query = query.replace(" ", "+");
-	query = query.replace(" ", "+");
-	query = query.replace(" ", "+");
+	// using / /g modifier for " "
+	query = query.replace(/ /g, "+");
 
 	var queryParts = query.split("+");
 	

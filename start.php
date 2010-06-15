@@ -38,4 +38,3 @@ Follow following steps
 require_once("footer.php");
 
 ?>
-
