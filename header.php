@@ -6,6 +6,23 @@
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /> 
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
+<script>
+function installSearchEngine() {
+ if (window.external && ("AddSearchProvider" in window.external)) {
+   // Firefox 2 and IE 7, OpenSearch
+   window.external.AddSearchProvider("http://www.temilan.com/Red/RedSearchPlugin.xml");
+ } else if (window.sidebar && ("addSearchEngine" in window.sidebar)) {
+   // Firefox <= 1.5, Sherlock
+   //window.sidebar.addSearchEngine("http://example.com/search-plugin.src",
+                                  //"http://example.com/search-icon.png",
+                                  //"Search Plugin", "");
+	alert("No search engine support");
+ } else {
+   // No search engine support (IE 6, Opera, etc).
+	alert("No search engine support");
+ }
+}
+</script>
 
 <title>Red - Making surfing the web easy</title>
 </head>

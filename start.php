@@ -5,15 +5,31 @@ require_once("header.php");
 
 ?>
 
+<style>
+div.divWithMargin{margin-left:100px;margin-right:100px;}
+
+ol.steps{}
+ol.steps li{font-weight:bold; padding:20px;}
+ol.steps li span{font-weight:normal;}
+</style>
+
+<div class="divWithMargin">
 Follow following steps
 
-<ol>
-<li>Install Red as your default search provider.
-<li>Add keywords that you want to track your seaches. If you can't think of many add #(hash) with a keyword to enable sidebar for that query
-<li>Start using Red. Drag and srop links to left sidebar so Red will keep track of them.
+<ol class="steps">
+<li><span>Add Red to your list of search engines.<br /><a href="#" onclick="installSearchEngine(); return false;">Click here</a> (Select <i>Start using it right away</i>) </span>
+<li><span>Add keywords that you want to track your searches.<br />
+		  If you are planning to visit "<i>France</i>" and doing research on it then add "<i>France</i>" to the list. <br />
+		  Or if you are learning new recipes then add "recipe" as a keyword. <br />
+		  <a href="keywords.php">Goto Tracked Keywords</a></span>
+<li><span>Start using Red. <br /> Drag and drop links to left sidebar so Red will keep track of them.</span>
 </ol>
 
+</div>
+
 <!--
+
+ If you can't think of many add #(hash) with a keyword to enable sidebar for that query
 
 <p><a href="https://addons.mozilla.org/en-US/firefox/addon/748/">Install GraseMonkey</a> if you use firefox. For chrome users nothing to do.
 

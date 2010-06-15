@@ -7,9 +7,9 @@ require_once("header.php");
 
 <p>Your privacy is the most important thing for me. Logging searches is sensitive topic.
 
-<p>In no way the searches will be shared or search history or bookmarks shared witohut explicit consent.
+<p>In no way the searches will be shared or search history or bookmarks shared without explicit consent.
 
-<p>As I add features, sharing will be enabled but it will be always opt-in model. You decide what you want to share and what not.
+<p>As I add features, sharing will be enabled but it will always be opt-in model. You decide what you want to share and what not.
 
 <p>Amit
 
