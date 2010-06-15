@@ -2,7 +2,7 @@
 
 if ($_SERVER['SERVER_NAME'] == "temilan.com")
 {
-	header("location:http://www.temilan.com/".$_SERVER['REQUEST_URI']);
+	header("location:http://www.temilan.com".$_SERVER['REQUEST_URI']);
 }
 
 ?>
