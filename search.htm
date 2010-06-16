@@ -13,6 +13,9 @@
 ///////////////////
 var matchedKeyword = "";
 
+var prevent_bust = 0;
+var enablePreventBust = true;
+
 // set by showLeftMenu
 var keyword;
 var query;
@@ -192,19 +195,6 @@ function needKeywordsUpdate()
 function updateKeywordsArray()
 {
 	var xmlhttp = getXMLHttpRequest();
-	
-/*
-	if (window.XMLHttpRequest)
-	{
-		// code for IE7+, Firefox, Chrome, Opera, Safari
-		xmlhttp=new XMLHttpRequest();
-	}
-	else
-	{
-		// code for IE6, IE5
-		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-	}
-*/
 
 	// making the call syncronous
 	xmlhttp.open("GET","keywords.php?action=enlist",false); // false
@@ -311,6 +301,17 @@ function loaded()
 	// the url
 	// Changes in anchor does no cause page reload so it is important to check anchor regularly for any changes
 	setInterval('checkUrlForAnchor()',100);
+
+	if (enablePreventBust)
+	{
+		window.onbeforeunload = function() { prevent_bust++;}  
+		setInterval(function() {  
+		if (prevent_bust > 0) {
+			prevent_bust -= 2  
+			window.top.location = '204.php'  
+		  }  
+		}, 1) ;
+	}
 }
 
 function getBrowser()
